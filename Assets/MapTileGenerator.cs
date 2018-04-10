@@ -1,4 +1,6 @@
-﻿using System;
+﻿// original version: http://www.roguebasin.com/index.php?title=C-Sharp_Example_of_Dungeon-Building_Algorithm
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
