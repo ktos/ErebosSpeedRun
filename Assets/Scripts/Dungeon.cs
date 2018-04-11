@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Tile
+public enum TileType
 {
     Unused,
     Floor,
@@ -15,35 +15,35 @@ public enum Tile
 
 public class TileHelper
 {
-    public static char TileToText(Tile tile)
+    public static char TileTypeToText(TileType tile)
     {
         switch (tile)
         {
-            case Tile.Unused:
+            case TileType.Unused:
                 return ' ';
-            case Tile.Wall:
+            case TileType.Wall:
                 return 'X';
-            case Tile.Floor:
+            case TileType.Floor:
                 return 'F';
-            case Tile.Door:
+            case TileType.Door:
                 return 'D';
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    public static Tile TextToTile(char text)
+    public static TileType TextToTileType(char text)
     {
         switch (text)
         {
             case 'X':
-                return Tile.Wall;
+                return TileType.Wall;
             case 'F':
-                return Tile.Floor;
+                return TileType.Floor;
             case ' ':
-                return Tile.Unused;
+                return TileType.Unused;
             case 'D':
-                return Tile.Door;
+                return TileType.Door;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -52,7 +52,7 @@ public class TileHelper
 
 public enum Direction
 {
-    North, East, West, South
+    North = 0, East = 1, South = 2, West = 3, Unknown = 4
 }
 
 public class Dungeon
@@ -84,25 +84,25 @@ public class Dungeon
     const int ChanceRoom = 75;
 
     // our map
-    Tile[] _dungeonMap = { };
+    TileType[] _dungeonMap = { };
 
     readonly IRandomize _rnd;
 
     readonly Action<string> _logger;
 
-    public static Tile[,] FileToTileMap(string fileContents)
+    public static TileType[,] FileToTileMap(string fileContents)
     {
         var lines = fileContents.Split('\n');
         var dim = lines[0].Split(',');
 
-        var tileMap = new Tile[int.Parse(dim[0]), int.Parse(dim[1])];
+        var tileMap = new TileType[int.Parse(dim[0]), int.Parse(dim[1])];
 
 
         for (int i = 0; i < tileMap.GetLength(0); i++)
         {
             for (int j = 0; j < tileMap.GetLength(1); j++)
             {
-                tileMap[i, j] = TileHelper.TextToTile(lines[i + 1][j]);
+                tileMap[i, j] = TileHelper.TextToTileType(lines[i + 1][j]);
             }
         }
 
@@ -182,7 +182,7 @@ public class Dungeon
         }
     }
 
-    public Tile GetCellType(int x, int y)
+    public TileType GetCellType(int x, int y)
     {
         try
         {
@@ -213,7 +213,7 @@ public class Dungeon
         return points.Where(p => InBounds(p.Item1));
     }
 
-    public IEnumerable<Tuple<PointI, Direction, Tile>> GetSurroundings(PointI v)
+    public IEnumerable<Tuple<PointI, Direction, TileType>> GetSurroundings(PointI v)
     {
         return
             this.GetSurroundingPoints(v)
@@ -236,8 +236,8 @@ public class Dungeon
         int xlen = this.GetRand(4, xlength);
         int ylen = this.GetRand(4, ylength);
 
-        const Tile Floor = Tile.Floor;
-        const Tile Wall = Tile.Wall;
+        const TileType Floor = TileType.Floor;
+        const TileType Wall = TileType.Wall;
 
         // choose the way it's pointing at
         var points = GetRoomPoints(x, y, xlen, ylen, direction).ToArray();
@@ -246,7 +246,7 @@ public class Dungeon
         if (
             points.Any(
                 s =>
-                s.Y < 0 || s.Y > this._ysize || s.X < 0 || s.X > this._xsize || this.GetCellType(s.X, s.Y) != Tile.Unused)) return false;
+                s.Y < 0 || s.Y > this._ysize || s.X < 0 || s.X > this._xsize || this.GetCellType(s.X, s.Y) != TileType.Unused)) return false;
         _logger(
                   string.Format(
                       "Making room:int x={0}, int y={1}, int xlength={2}, int ylength={3}, int direction={4}",
@@ -264,14 +264,14 @@ public class Dungeon
         return true;
     }
 
-    public Tile[] GetDungeon()
+    public TileType[] GetDungeon()
     {
         return this._dungeonMap;
     }
 
     public char GetCellTileAsText(int x, int y)
     {
-        return TileHelper.TileToText(GetCellType(x, y));
+        return TileHelper.TileTypeToText(GetCellType(x, y));
     }
 
     //used to print the map on the screen
@@ -288,9 +288,9 @@ public class Dungeon
         }
     }
 
-    public Tile[,] GetDungeonAs2D()
+    public TileType[,] GetDungeonAs2D()
     {
-        Tile[,] tiles = new Tile[_xsize, _ysize];
+        TileType[,] tiles = new TileType[_xsize, _ysize];
 
         for (int y = 0; y < this._ysize; y++)
         {
@@ -342,7 +342,7 @@ public class Dungeon
         Console.WriteLine(MsgMaxObjects + this._objects);
 
         // redefine the map var, so it's adjusted to our new map size
-        this._dungeonMap = new Tile[this._xsize * this._ysize];
+        this._dungeonMap = new TileType[this._xsize * this._ysize];
 
         // start with making the "standard stuff" on the map
         this.Initialize();
@@ -379,13 +379,13 @@ public class Dungeon
                 newx = this.GetRand(1, this._xsize - 1);
                 newy = this.GetRand(1, this._ysize - 1);
 
-                if (GetCellType(newx, newy) == Tile.Wall)
+                if (GetCellType(newx, newy) == TileType.Wall)
                 {
                     var surroundings = this.GetSurroundings(new PointI() { X = newx, Y = newy });
 
                     // check if we can reach the place
                     var canReach =
-                        surroundings.FirstOrDefault(s => s.Item3 == Tile.Floor);
+                        surroundings.FirstOrDefault(s => s.Item3 == TileType.Floor);
                     if (canReach == null)
                     {
                         continue;
@@ -417,17 +417,17 @@ public class Dungeon
                     // check that we haven't got another door nearby, so we won't get alot of openings besides
                     // each other
 
-                    if (GetCellType(newx, newy + 1) == Tile.Door) // north
+                    if (GetCellType(newx, newy + 1) == TileType.Door) // north
                     {
                         validTile = null;
 
                     }
 
-                    else if (GetCellType(newx - 1, newy) == Tile.Door) // east
+                    else if (GetCellType(newx - 1, newy) == TileType.Door) // east
                         validTile = null;
-                    else if (GetCellType(newx, newy - 1) == Tile.Door) // south
+                    else if (GetCellType(newx, newy - 1) == TileType.Door) // south
                         validTile = null;
-                    else if (GetCellType(newx + 1, newy) == Tile.Door) // west
+                    else if (GetCellType(newx + 1, newy) == TileType.Door) // west
                         validTile = null;
 
 
@@ -447,10 +447,10 @@ public class Dungeon
                         currentFeatures++; // add to our quota
 
                         // then we mark the wall opening with a door
-                        this.SetCell(newx, newy, Tile.Door);
+                        this.SetCell(newx, newy, TileType.Door);
 
                         // clean up infront of the door so we can reach it
-                        this.SetCell(newx + xmod, newy + ymod, Tile.Floor);
+                        this.SetCell(newx + xmod, newy + ymod, TileType.Floor);
                     }
                 }
                 //else if (feature >= ChanceRoom)
@@ -483,13 +483,13 @@ public class Dungeon
         {
             for (int x = 0; x < this._xsize; x++)
             {
-                this.SetCell(x, y, Tile.Unused);
+                this.SetCell(x, y, TileType.Unused);
             }
         }
     }
 
     // setting a tile's type
-    void SetCell(int x, int y, Tile celltype)
+    void SetCell(int x, int y, TileType celltype)
     {
         this._dungeonMap[x + this._xsize * y] = celltype;
     }

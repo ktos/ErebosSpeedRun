@@ -472,7 +472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 4124909705302784, guid: 03c2dc0bc82bf6841aa022f0bbea1ad7, type: 2}
   ceiling: {fileID: 4124909705302784, guid: 834522314a16c4d4e94bebcaccfacd73, type: 2}
-  wall: {fileID: 4939752169943992, guid: 7e3c930f18c0f734f80c8eb61415c614, type: 2}
+  wall: {fileID: 4220464617017300, guid: 17f1432a9eac1c946b68aa31437a0cd5, type: 2}
   door: {fileID: 4640952912718344, guid: 44aac1af72a715a46b3124d2f5668a14, type: 2}
   upstairs: {fileID: 0}
   downstairs: {fileID: 0}
@@ -536,7 +536,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 70
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:

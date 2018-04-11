@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MapTileGenerator : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class MapTileGenerator : MonoBehaviour
     {
         var r = new BasicRandom(seed);
 
-        Tile[,] tiles;
+        TileType[,] tiles;
         if (level == null)
         {
             Dungeon d = new Dungeon(r, s => { Debug.Log("Dungeon: " + s); });
@@ -38,11 +39,11 @@ public class MapTileGenerator : MonoBehaviour
         MovePlayerToRandomTile(r, tiles);
     }
 
-    private void MovePlayerToRandomTile(BasicRandom r, Tile[,] dungeon)
+    private void MovePlayerToRandomTile(BasicRandom r, TileType[,] dungeon)
     {
         var randomTile = dungeon[0, 0];
         int x = 0, y = 0;
-        while (randomTile != Tile.Floor)
+        while (randomTile != TileType.Floor)
         {
             x = r.Next(0, dungeon.GetLength(0));
             y = r.Next(0, dungeon.GetLength(1));
@@ -52,26 +53,48 @@ public class MapTileGenerator : MonoBehaviour
         player.transform.position = new Vector3(x, 1, y);
     }
 
-    private void CreateLevel(Tile[,] tiles)
+    private void CreateLevel(TileType[,] tiles)
     {
         for (int i = 0; i < tiles.GetLength(0); i++)
         {
             for (int j = 0; j < tiles.GetLength(1); j++)
             {
                 switch (tiles[i, j])
-                {                    
-                    case Tile.Floor:
+                {
+                    case TileType.Floor:
                         Instantiate(floor, new Vector3(i, 0, j), Quaternion.identity);
                         Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
-                    case Tile.Wall:
-                        Instantiate(wall, new Vector3(i, 1, j), Quaternion.identity);
+                    case TileType.Wall:
+                        var orientation = GetTileOrientation(tiles, i, j);
+                        if (orientation == Direction.Unknown) orientation = Direction.North;
+
+                        int rotate = 0;
+                        switch (orientation)
+                        {
+                            case Direction.North:
+                                rotate = 270;
+                                break;
+                            case Direction.East:
+                                rotate = 180;
+                                break; ;
+                            case Direction.South:
+                                rotate = 90;
+                                break;
+                            case Direction.West:
+                                rotate = 0;
+                                break;
+                            case Direction.Unknown:
+                                break;
+                        }
+
+                        Instantiate(wall, new Vector3(i, 2, j), Quaternion.Euler(0, rotate, 0));
                         break;
 
-                    case Tile.Door:
+                    case TileType.Door:
                         Instantiate(door, new Vector3(i, 0, j), Quaternion.identity);
-                        Instantiate(ceiling, new Vector3(i, 4, j), new Quaternion(45, 0, 0, 0));
+                        Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
                     default:
@@ -79,5 +102,29 @@ public class MapTileGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private Direction GetTileOrientation(TileType[,] tiles, int x, int y)
+    {
+        int maxx = tiles.GetLength(0);
+        int maxy = tiles.GetLength(1);
+
+        if (x > maxx || x < 0 || y > maxy || y < 0)
+            throw new ArgumentOutOfRangeException();
+
+        if (tiles[x, y] == TileType.Floor || tiles[x, y] == TileType.Unused)
+            throw new ArgumentException("Floor or empty tiles are not oriented.");
+
+        if (tiles[x, y] == TileType.Wall)
+        {
+            if (x + 1 <= maxx - 1 && tiles[x + 1, y] == TileType.Floor) return Direction.East;
+            if (x - 1 >= 0 && tiles[x - 1, y] == TileType.Floor) return Direction.West;
+            if (y + 1 <= maxy - 1 && tiles[x, y + 1] == TileType.Floor) return Direction.South;
+            if (y - 1 >= 0 && tiles[x, y - 1] == TileType.Floor) return Direction.North;
+
+            return Direction.Unknown;
+        }
+
+        throw new Exception("Unknown orientation: " + x + "," + y);
     }
 }
