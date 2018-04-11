@@ -473,7 +473,7 @@ MonoBehaviour:
   floor: {fileID: 4124909705302784, guid: 03c2dc0bc82bf6841aa022f0bbea1ad7, type: 2}
   ceiling: {fileID: 4124909705302784, guid: 834522314a16c4d4e94bebcaccfacd73, type: 2}
   wall: {fileID: 4149922381661284, guid: e9ab24ce23462164b930cd4ea8f54d68, type: 2}
-  door: {fileID: 4640952912718344, guid: 44aac1af72a715a46b3124d2f5668a14, type: 2}
+  door: {fileID: 4125182654746800, guid: 44aac1af72a715a46b3124d2f5668a14, type: 2}
   upstairs: {fileID: 0}
   downstairs: {fileID: 0}
   corridor: {fileID: 0}
