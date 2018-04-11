@@ -13,6 +13,43 @@ public enum Tile
     Door
 }
 
+public class TileHelper
+{
+    public static char TileToText(Tile tile)
+    {
+        switch (tile)
+        {
+            case Tile.Unused:
+                return ' ';
+            case Tile.Wall:
+                return 'X';
+            case Tile.Floor:
+                return 'F';
+            case Tile.Door:
+                return 'D';
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public static Tile TextToTile(char text)
+    {
+        switch (text)
+        {
+            case 'X':
+                return Tile.Wall;
+            case 'F':
+                return Tile.Floor;
+            case ' ':
+                return Tile.Unused;
+            case 'D':
+                return Tile.Door;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+
 public enum Direction
 {
     North, East, West, South
@@ -65,22 +102,7 @@ public class Dungeon
         {
             for (int j = 0; j < tileMap.GetLength(1); j++)
             {
-                switch (lines[i + 1][j])
-                {
-                    case 'X':
-                        tileMap[i, j] = Tile.Wall;
-                        break;
-
-                    case 'F':
-                        tileMap[i, j] = Tile.Floor;
-                        break;
-
-                    case ' ':
-                        tileMap[i, j] = Tile.Unused;
-                        break;
-                }
-
-                Debug.Log("i=" + i + " j=" + j);
+                tileMap[i, j] = TileHelper.TextToTile(lines[i + 1][j]);
             }
         }
 
@@ -168,7 +190,7 @@ public class Dungeon
         }
         catch (IndexOutOfRangeException)
         {
-            //new { x, y }.Dump("exceptional");
+            _logger("Exceptional cell type: " + x + "," + y);
             throw;
         }
     }
@@ -177,101 +199,6 @@ public class Dungeon
     {
         return _rnd.Next(min, max);
     }
-
-    //public bool MakeCorridor(int x, int y, int length, Direction direction)
-    //{
-    //    // define the dimensions of the corridor (er.. only the width and height..)
-    //    int len = this.GetRand(2, length);
-    //    const Tile Floor = Tile.Corridor;
-
-    //    int xtemp;
-    //    int ytemp = 0;
-
-    //    switch (direction)
-    //    {
-    //        case Direction.North:
-    //            // north
-    //            // check if there's enough space for the corridor
-    //            // start with checking it's not out of the boundaries
-    //            if (x < 0 || x > this._xsize) return false;
-    //            xtemp = x;
-
-    //            // same thing here, to make sure it's not out of the boundaries
-    //            for (ytemp = y; ytemp > (y - len); ytemp--)
-    //            {
-    //                if (ytemp < 0 || ytemp > this._ysize) return false; // oh boho, it was!
-    //                if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-    //            }
-
-    //            // if we're still here, let's start building
-    //            Corridors++;
-    //            for (ytemp = y; ytemp > (y - len); ytemp--)
-    //            {
-    //                this.SetCell(xtemp, ytemp, Floor);
-    //            }
-
-    //            break;
-
-    //        case Direction.East:
-    //            // east
-    //            if (y < 0 || y > this._ysize) return false;
-    //            ytemp = y;
-
-    //            for (xtemp = x; xtemp < (x + len); xtemp++)
-    //            {
-    //                if (xtemp < 0 || xtemp > this._xsize) return false;
-    //                if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-    //            }
-
-    //            Corridors++;
-    //            for (xtemp = x; xtemp < (x + len); xtemp++)
-    //            {
-    //                this.SetCell(xtemp, ytemp, Floor);
-    //            }
-
-    //            break;
-
-    //        case Direction.South:
-    //            // south
-    //            if (x < 0 || x > this._xsize) return false;
-    //            xtemp = x;
-
-    //            for (ytemp = y; ytemp < (y + len); ytemp++)
-    //            {
-    //                if (ytemp < 0 || ytemp > this._ysize) return false;
-    //                if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-    //            }
-
-    //            Corridors++;
-    //            for (ytemp = y; ytemp < (y + len); ytemp++)
-    //            {
-    //                this.SetCell(xtemp, ytemp, Floor);
-    //            }
-
-    //            break;
-    //        case Direction.West:
-    //            // west
-    //            if (ytemp < 0 || ytemp > this._ysize) return false;
-    //            ytemp = y;
-
-    //            for (xtemp = x; xtemp > (x - len); xtemp--)
-    //            {
-    //                if (xtemp < 0 || xtemp > this._xsize) return false;
-    //                if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-    //            }
-
-    //            Corridors++;
-    //            for (xtemp = x; xtemp > (x - len); xtemp--)
-    //            {
-    //                this.SetCell(xtemp, ytemp, Floor);
-    //            }
-
-    //            break;
-    //    }
-
-    //    // woot, we're still here! let's tell the other guys we're done!!
-    //    return true;
-    //}
 
     public IEnumerable<Tuple<PointI, Direction>> GetSurroundingPoints(PointI v)
     {
@@ -309,12 +236,10 @@ public class Dungeon
         int xlen = this.GetRand(4, xlength);
         int ylen = this.GetRand(4, ylength);
 
-        // the tile type it's going to be filled with
         const Tile Floor = Tile.Floor;
-
         const Tile Wall = Tile.Wall;
-        // choose the way it's pointing at
 
+        // choose the way it's pointing at
         var points = GetRoomPoints(x, y, xlen, ylen, direction).ToArray();
 
         // Check if there's enough space left for it
@@ -336,7 +261,6 @@ public class Dungeon
             this.SetCell(p.X, p.Y, IsWall(x, y, xlen, ylen, p.X, p.Y, direction) ? Wall : Floor);
         }
 
-        // yay, all done
         return true;
     }
 
@@ -345,21 +269,9 @@ public class Dungeon
         return this._dungeonMap;
     }
 
-    public char GetCellTile(int x, int y)
+    public char GetCellTileAsText(int x, int y)
     {
-        switch (GetCellType(x, y))
-        {
-            case Tile.Unused:
-                return char.MinValue;
-            case Tile.Wall:
-                return 'X';
-            case Tile.Floor:
-                return '#';
-            case Tile.Door:
-                return 'D';
-            default:
-                throw new ArgumentOutOfRangeException("x,y");
-        }
+        return TileHelper.TileToText(GetCellType(x, y));
     }
 
     //used to print the map on the screen
@@ -369,7 +281,7 @@ public class Dungeon
         {
             for (int x = 0; x < this._xsize; x++)
             {
-                Console.Write(GetCellTile(x, y));
+                Console.Write(GetCellTileAsText(x, y));
             }
 
             if (this._xsize <= xmax) Console.WriteLine();
@@ -571,15 +483,6 @@ public class Dungeon
         {
             for (int x = 0; x < this._xsize; x++)
             {
-                //// ie, making the borders of unwalkable walls
-                //if (y == 0 || y == this._ysize - 1 || x == 0 || x == this._xsize - 1)
-                //{
-                //    this.SetCell(x, y, Tile.StoneWall);
-                //}
-                //else
-                //{                        // and fill the rest with dirt
-                //    this.SetCell(x, y, Tile.Unused);
-                //}
                 this.SetCell(x, y, Tile.Unused);
             }
         }

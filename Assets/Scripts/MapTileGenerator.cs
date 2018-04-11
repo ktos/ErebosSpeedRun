@@ -21,21 +21,21 @@ public class MapTileGenerator : MonoBehaviour
     {
         var r = new BasicRandom(seed);
 
-        Tile[,] dungeon;
+        Tile[,] tiles;
         if (level == null)
         {
-            Dungeon d = new Dungeon(r, s => { Debug.Log("Logger: " + s); });
+            Dungeon d = new Dungeon(r, s => { Debug.Log("Dungeon: " + s); });
             d.CreateDungeon(width, height, things);
 
-            dungeon = d.GetDungeonAs2D();
+            tiles = d.GetDungeonAs2D();
         }
         else
         {
-            dungeon = Dungeon.FileToTileMap(level.text);
+            tiles = Dungeon.FileToTileMap(level.text);
         }
 
-        GenerateDungeon(dungeon);
-        MovePlayerToRandomTile(r, dungeon);
+        CreateLevel(tiles);
+        MovePlayerToRandomTile(r, tiles);
     }
 
     private void MovePlayerToRandomTile(BasicRandom r, Tile[,] dungeon)
@@ -52,17 +52,17 @@ public class MapTileGenerator : MonoBehaviour
         player.transform.position = new Vector3(x, 1, y);
     }
 
-    private void GenerateDungeon(Tile[,] dungeon)
+    private void CreateLevel(Tile[,] tiles)
     {
-        for (int i = 0; i < dungeon.GetLength(0); i++)
+        for (int i = 0; i < tiles.GetLength(0); i++)
         {
-            for (int j = 0; j < dungeon.GetLength(1); j++)
+            for (int j = 0; j < tiles.GetLength(1); j++)
             {
-                switch (dungeon[i, j])
+                switch (tiles[i, j])
                 {                    
                     case Tile.Floor:
                         Instantiate(floor, new Vector3(i, 0, j), Quaternion.identity);
-                        Instantiate(ceiling, new Vector3(i, 4, j), new Quaternion(45, 0, 0, 0));
+                        Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
                     case Tile.Wall:
