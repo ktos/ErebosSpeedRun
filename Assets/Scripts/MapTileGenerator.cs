@@ -74,22 +74,22 @@ public class MapTileGenerator : MonoBehaviour
                         switch (orientation)
                         {
                             case Direction.North:
-                                rotate = 270;
-                                break;
-                            case Direction.East:
-                                rotate = 180;
-                                break; ;
-                            case Direction.South:
                                 rotate = 90;
                                 break;
-                            case Direction.West:
+                            case Direction.East:
                                 rotate = 0;
+                                break;
+                            case Direction.South:
+                                rotate = 270;
+                                break;
+                            case Direction.West:
+                                rotate = 180;
                                 break;
                             case Direction.Unknown:
                                 break;
                         }
 
-                        Instantiate(wall, new Vector3(i, 2, j), Quaternion.Euler(0, rotate, 0));
+                        Instantiate(wall, new Vector3(i, 2, j), Quaternion.Euler(0, rotate, 0));                        
                         break;
 
                     case TileType.Door:
