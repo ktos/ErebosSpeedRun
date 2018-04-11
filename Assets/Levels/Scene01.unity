@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -478,6 +478,7 @@ MonoBehaviour:
   downstairs: {fileID: 0}
   corridor: {fileID: 0}
   player: {fileID: 518979302}
+  level: {fileID: 4900000, guid: 29b0a4cf01243c64c835d8c21a282b10, type: 3}
   width: 500
   height: 500
   things: 50

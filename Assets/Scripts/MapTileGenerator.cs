@@ -16,6 +16,7 @@ public class MapTileGenerator : MonoBehaviour
     public Transform downstairs;
     public Transform corridor;
     public GameObject player;
+    public TextAsset level;
 
     public int width;
     public int height;
@@ -25,21 +26,23 @@ public class MapTileGenerator : MonoBehaviour
     void Start()
     {
         var r = new BasicRandom();
-        Dungeon d = new Dungeon(r, s => { Debug.Log("Logger: " + s); });
-        d.CreateDungeon(width, height, things);
+        //Dungeon d = new Dungeon(r, s => { Debug.Log("Logger: " + s); });
+        //d.CreateDungeon(width, height, things);        
 
-        var dungeon = d.GetDungeonAs2D();
+        //var dungeon = d.GetDungeonAs2D();
+
+        var dungeon = Dungeon.FileToTileMap(level.text);
 
         for (int i = 0; i < dungeon.GetLength(0); i++)
         {
             for (int j = 0; j < dungeon.GetLength(1); j++)
             {
-                switch (dungeon[i,j])
+                switch (dungeon[i, j])
                 {
                     case Tile.Corridor:
                         Instantiate(floor, new Vector3(i, 0, j), Quaternion.identity);
                         Instantiate(ceiling, new Vector3(i, 4, j), new Quaternion(45, 0, 0, 0));
-                        break;                    
+                        break;
 
                     case Tile.DirtFloor:
                         Instantiate(floor, new Vector3(i, 0, j), Quaternion.identity);
@@ -74,7 +77,7 @@ public class MapTileGenerator : MonoBehaviour
                     default:
                         break;
                 }
-                
+
             }
         }
 
@@ -150,6 +153,39 @@ public class Dungeon
 
     readonly Action<string> _logger;
 
+    public static Tile[,] FileToTileMap(string fileContents)
+    {
+        var lines = fileContents.Split('\n');
+        var dim = lines[0].Split(',');
+
+        var tileMap = new Tile[int.Parse(dim[0]), int.Parse(dim[1])];
+
+
+        for (int i = 0; i < tileMap.GetLength(0); i++)
+        {
+            for (int j = 0; j < tileMap.GetLength(1); j++)
+            {
+                switch (lines[i + 1][j])
+                {
+                    case 'X':
+                        tileMap[i, j] = Tile.StoneWall;
+                        break;
+
+                    case 'F':
+                        tileMap[i, j] = Tile.DirtFloor;
+                        break;
+
+                    case ' ':
+                        tileMap[i, j] = Tile.Unused;
+                        break;
+                }
+
+                Debug.Log("i=" + i + " j=" + j);
+            }
+        }
+
+        return tileMap;
+    }
 
     public Dungeon(IRandomize rnd, Action<string> logger)
     {
