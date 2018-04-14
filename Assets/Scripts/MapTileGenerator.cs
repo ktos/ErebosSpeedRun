@@ -12,6 +12,7 @@ public class MapTileGenerator : MonoBehaviour
     public Transform corridor;
     public GameObject player;
     public TextAsset level;
+    public GameObject sceneSwitcher;
 
     public int width;
     public int height;
@@ -111,8 +112,8 @@ public class MapTileGenerator : MonoBehaviour
                         float fixX = orientation == Direction.South ? 0.5f : 0;
                         float fixZ = orientation == Direction.East ? 0.5f : 0;
 
-                        Instantiate(door, new Vector3(i + fixX, 0, j + fixZ), Quaternion.Euler(0, rotate2, 0));
-                        
+                        var createdDoor = Instantiate(door, new Vector3(i + fixX, 0, j + fixZ), Quaternion.Euler(0, rotate2, 0));
+                        createdDoor.GetComponent<LoadNextScene>().sceneSwitcher = sceneSwitcher;
                         
                         //Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;

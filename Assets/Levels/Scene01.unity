@@ -458,6 +458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1408060811}
   - component: {fileID: 1408060810}
+  - component: {fileID: 1408060812}
   m_Layer: 0
   m_Name: Scene Switcher
   m_TagString: Untagged
@@ -493,6 +494,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1408060812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1408060809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1102c7bd3052394784d93dd719e6113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneSwitcher: {fileID: 1408060809}
 --- !u!1 &1512005603
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +620,7 @@ MonoBehaviour:
   corridor: {fileID: 0}
   player: {fileID: 518979302}
   level: {fileID: 4900000, guid: 29b0a4cf01243c64c835d8c21a282b10, type: 3}
+  sceneSwitcher: {fileID: 1408060809}
   width: 500
   height: 500
   things: 50
