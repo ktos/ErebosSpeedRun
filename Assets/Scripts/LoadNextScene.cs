@@ -8,6 +8,6 @@ public class LoadNextScene : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        sceneSwitcher.GetComponent<SceneSwitcher>().fadedLoadScene("Scene01");
+        sceneSwitcher.GetComponent<SceneSwitcher>().FadedLoadScene("Scene01");
     }
 }
