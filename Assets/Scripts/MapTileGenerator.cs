@@ -90,7 +90,7 @@ public class MapTileGenerator : MonoBehaviour
                                 break;
                         }
 
-                        Instantiate(wall, new Vector3(i, 2, j), Quaternion.Euler(0, rotate, 0));                        
+                        Instantiate(wall, new Vector3(i, 2, j), Quaternion.Euler(0, rotate, 0));
                         break;
 
                     case TileType.Door:
@@ -113,8 +113,7 @@ public class MapTileGenerator : MonoBehaviour
                         float fixZ = orientation == Direction.East ? 0.5f : 0;
 
                         var createdDoor = Instantiate(door, new Vector3(i + fixX, 0, j + fixZ), Quaternion.Euler(0, rotate2, 0));
-                        createdDoor.GetComponent<LoadNextScene>().sceneSwitcher = sceneSwitcher;
-                        
+
                         //Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
@@ -148,8 +147,8 @@ public class MapTileGenerator : MonoBehaviour
 
         if (tiles[x, y] == TileType.Door)
         {
-            if (x + 1 <= maxx - 1 && tiles[x + 1, y] == TileType.Door) return Direction.South;            
-            if (y + 1 <= maxy - 1 && tiles[x, y + 1] == TileType.Door) return Direction.East;            
+            if (x + 1 <= maxx - 1 && tiles[x + 1, y] == TileType.Door) return Direction.South;
+            if (y + 1 <= maxy - 1 && tiles[x, y + 1] == TileType.Door) return Direction.East;
 
             return Direction.Unknown;
         }
