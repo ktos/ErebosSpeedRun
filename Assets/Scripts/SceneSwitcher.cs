@@ -25,6 +25,11 @@ public class SceneSwitcher : MonoBehaviour
         Application.Quit();
     }
 
+    public void MainMenu()
+    {
+        FadedLoadScene("MainMenu");
+    }
+
     void Update()
     {
         // fade to black (leaving scene)
