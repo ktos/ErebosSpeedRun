@@ -465,8 +465,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeTimer: 0
-  fading_OUT: 0
-  fading_IN: 0
+  fadingOut: 0
+  fadingIn: 0
   fadeMat: {fileID: 2100000, guid: 2a92cb0dc33f38a49b0680e94ec67998, type: 2}
 --- !u!4 &1408060811
 Transform:
