@@ -20,6 +20,11 @@ public class SceneSwitcher : MonoBehaviour
         fadingOut = true;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     void Update()
     {
         // fade to black (leaving scene)
