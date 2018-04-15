@@ -59,7 +59,7 @@ public class SceneSwitcher : MonoBehaviour
         if (fadingIn && fadeTimer <= 0f)
         {
             fadingIn = false;
-        }
+        }        
     }
 
     // Scene was loaded, fade in:

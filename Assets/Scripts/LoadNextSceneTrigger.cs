@@ -6,9 +6,11 @@ public class LoadNextSceneTrigger : MonoBehaviour
 {     
     void OnTriggerEnter(Collider other)
     {
-        var sceneSwitcher = FindObjectOfType<SceneSwitcher>();
+        //var sceneSwitcher = FindObjectOfType<SceneSwitcher>();
 
-        if (sceneSwitcher != null)
-            sceneSwitcher.FadedLoadScene("Scene01");
+        //if (sceneSwitcher != null)
+        //    sceneSwitcher.FadedLoadScene("Scene01");
+        
+        GameObject.Find("Tooltip").GetComponent<TooltipHandler>().ShowTooltip("Hello, world!", 10);
     }
 }
