@@ -1,0 +1,2 @@
+-r:System.Net.Http
+-r:mscorlib="C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\4.6-api\mscorlib.dll"

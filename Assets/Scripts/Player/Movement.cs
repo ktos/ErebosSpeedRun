@@ -24,6 +24,10 @@ public class Movement : MonoBehaviour
                 GetComponent<Animator>().SetTrigger("Jump");
             }
         }
+        else
+        {
+            Debug.Log("Not grounded");
+        }
 
         moveDirection.y -= gravity * Time.deltaTime;
 

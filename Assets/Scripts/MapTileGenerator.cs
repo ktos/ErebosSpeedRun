@@ -7,8 +7,7 @@ public class MapTileGenerator : MonoBehaviour
     public Transform ceiling;
     public Transform wall;
     public Transform door;
-    public Transform upstairs;
-    public Transform downstairs;
+    public Transform start;
     public Transform corridor;
     public GameObject player;
     public TextAsset level;
@@ -19,11 +18,13 @@ public class MapTileGenerator : MonoBehaviour
     public int things;
     public int seed = -1;
 
+    private TileType[,] tiles;
+
     private void Start()
     {
         var r = new BasicRandom(seed);
 
-        TileType[,] tiles;
+
         if (level == null)
         {
             Dungeon d = new Dungeon(r, s => { Debug.Log("Dungeon: " + s); });
@@ -36,25 +37,39 @@ public class MapTileGenerator : MonoBehaviour
             tiles = Dungeon.FileToTileMap(level.text);
         }
 
-        CreateLevel(tiles);
-        MovePlayerToRandomTile(r, tiles);
+        CreateLevel();
+        AssignCheckpoints();
+        //MovePlayerToRandomTile(r);
+        MovePlayerToStart();
     }
 
-    private void MovePlayerToRandomTile(BasicRandom r, TileType[,] dungeon)
+    private void MovePlayerToStart()
     {
-        var randomTile = dungeon[0, 0];
+        var start = GameObject.FindGameObjectWithTag("Start");
+        player.transform.position = new Vector3(start.transform.position.x, 1, start.transform.position.z);
+    }
+
+    private void AssignCheckpoints()
+    {
+        var finish = GameObject.FindGameObjectWithTag("Finish").GetComponent<Checkpoint>();
+        var start = GameObject.FindGameObjectWithTag("Start").GetComponent<Checkpoint>().nextCheckpoint = finish;
+    }
+
+    private void MovePlayerToRandomTile(BasicRandom r)
+    {
+        var randomTile = tiles[0, 0];
         int x = 0, y = 0;
         while (randomTile != TileType.Floor)
         {
-            x = r.Next(0, dungeon.GetLength(0));
-            y = r.Next(0, dungeon.GetLength(1));
-            randomTile = dungeon[x, y];
+            x = r.Next(0, tiles.GetLength(0));
+            y = r.Next(0, tiles.GetLength(1));
+            randomTile = tiles[x, y];
         }
 
         player.transform.position = new Vector3(x, 1, y);
     }
 
-    private void CreateLevel(TileType[,] tiles)
+    private void CreateLevel()
     {
         for (int i = 0; i < tiles.GetLength(0); i++)
         {
@@ -67,8 +82,13 @@ public class MapTileGenerator : MonoBehaviour
                         Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
+                    case TileType.Start:
+                        Instantiate(start, new Vector3(i, 0, j), Quaternion.identity);
+                        Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
+                        break;
+
                     case TileType.Wall:
-                        var orientation = GetTileOrientation(tiles, i, j);
+                        var orientation = GetTileOrientation(i, j);
                         if (orientation == Direction.Unknown) orientation = Direction.North;
 
                         int rotate = 0;
@@ -94,7 +114,7 @@ public class MapTileGenerator : MonoBehaviour
                         break;
 
                     case TileType.Door:
-                        orientation = GetTileOrientation(tiles, i, j);
+                        orientation = GetTileOrientation(i, j);
 
                         Debug.Log(orientation);
 
@@ -124,7 +144,7 @@ public class MapTileGenerator : MonoBehaviour
         }
     }
 
-    private Direction GetTileOrientation(TileType[,] tiles, int x, int y)
+    private Direction GetTileOrientation(int x, int y)
     {
         int maxx = tiles.GetLength(0);
         int maxy = tiles.GetLength(1);

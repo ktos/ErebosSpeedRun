@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ceiling
+  - Wall
+  - Start
   layers:
   - Default
   - TransparentFX

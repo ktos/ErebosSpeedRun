@@ -69,10 +69,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4125182654746800}
   - component: {fileID: 65125540879717428}
-  - component: {fileID: 114618683990368704}
+  - component: {fileID: 114111317675521744}
   m_Layer: 0
   m_Name: DoorTile
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -227,7 +227,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 3.5706482, z: 2}
   m_Center: {x: -0, y: 1.7853241, z: 0}
---- !u!114 &114618683990368704
+--- !u!114 &114111317675521744
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -235,6 +235,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1851027501834778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1102c7bd3052394784d93dd719e6113, type: 3}
+  m_Script: {fileID: 11500000, guid: 88097f15ceba7da47a3fe242f9153c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextCheckpoint: {fileID: 0}
+  isFinishLine: 1
+  isFirstCheckpoint: 0

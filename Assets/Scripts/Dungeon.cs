@@ -10,7 +10,8 @@ public enum TileType
     Unused,
     Floor,
     Wall,
-    Door
+    Door,
+    Start
 }
 
 public class TileHelper
@@ -27,6 +28,8 @@ public class TileHelper
                 return 'F';
             case TileType.Door:
                 return 'D';
+            case TileType.Start:
+                return 'S';
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -44,6 +47,8 @@ public class TileHelper
                 return TileType.Unused;
             case 'D':
                 return TileType.Door;
+            case 'S':
+                return TileType.Start;
             default:
                 throw new ArgumentOutOfRangeException();
         }
