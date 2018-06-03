@@ -20,12 +20,23 @@ public class Movement : MonoBehaviour
         {
             moveDirection = new Vector3(0, 0, Input.GetAxis("Vertical"));
             moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= speed;
+
+            if (Input.GetButton("Fire1"))
+            {                
+                moveDirection *= speed * 2;
+            }
+            else
+            {
+                moveDirection *= speed;
+            }
+
+
             if (Input.GetButton("Jump"))
             {
                 moveDirection.y = jumpSpeed;
                 //GetComponent<Animator>().SetTrigger("Jump");
             }
+
         }
 
         moveDirection.y -= gravity * Time.deltaTime;
@@ -51,7 +62,7 @@ public class Movement : MonoBehaviour
         {
             PlayerTooLow?.Invoke(this, null);
         }
-    } 
+    }
 
     void Start()
     {

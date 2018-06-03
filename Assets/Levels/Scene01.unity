@@ -1631,8 +1631,8 @@ MonoBehaviour:
   floor: {fileID: 4124909705302784, guid: 03c2dc0bc82bf6841aa022f0bbea1ad7, type: 2}
   ceiling: {fileID: 4124909705302784, guid: 834522314a16c4d4e94bebcaccfacd73, type: 2}
   wall: {fileID: 4149922381661284, guid: e9ab24ce23462164b930cd4ea8f54d68, type: 2}
-  door: {fileID: 4125182654746800, guid: 44aac1af72a715a46b3124d2f5668a14, type: 2}
-  start: {fileID: 4399314388523070, guid: 0b32ad28372f2b840a95eafd004934da, type: 2}
+  door: {fileID: 4295575935594368, guid: 44aac1af72a715a46b3124d2f5668a14, type: 2}
+  start: {fileID: 4666302592087714, guid: 0b32ad28372f2b840a95eafd004934da, type: 2}
   corridor: {fileID: 0}
   player: {fileID: 518979302}
   level: {fileID: 4900000, guid: 29b0a4cf01243c64c835d8c21a282b10, type: 3}
@@ -1879,7 +1879,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1593970947}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdcd06815c47d30489f70df42db56a48, type: 3}
   m_Name: 
