@@ -21,11 +21,11 @@ public class TileHelper
         switch (tile)
         {
             case TileType.Unused:
-                return ' ';
+                return '.';
             case TileType.Wall:
                 return 'X';
             case TileType.Floor:
-                return 'F';
+                return ' ';
             case TileType.Door:
                 return 'D';
             case TileType.Start:
@@ -41,9 +41,9 @@ public class TileHelper
         {
             case 'X':
                 return TileType.Wall;
-            case 'F':
-                return TileType.Floor;
             case ' ':
+                return TileType.Floor;
+            case '.':
                 return TileType.Unused;
             case 'D':
                 return TileType.Door;
