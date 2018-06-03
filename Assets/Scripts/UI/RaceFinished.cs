@@ -8,10 +8,18 @@ public class RaceFinished : MonoBehaviour
 {
     public static bool RaceFinishedProperly;
     public SceneSwitcher sceneSwitcher;
+    public Movement player;
 
     private void Start()
     {
         RaceFinishedProperly = false;
+    }
+
+    private void OnDie(object sender, System.EventArgs e)
+    {
+        player.PlayerTooLow -= OnDie;
+        RaceFinishedProperly = false;
+        sceneSwitcher.FadedLoadScene("Ending");
     }
 
     private void OnRaceFinished()
@@ -24,10 +32,12 @@ public class RaceFinished : MonoBehaviour
     private void OnEnable()
     {
         Checkpoint.RaceFinished += OnRaceFinished;
+        player.PlayerTooLow += OnDie;
     }
 
     private void OnDisable()
     {
         Checkpoint.RaceFinished -= OnRaceFinished;
+        player.PlayerTooLow -= OnDie;
     }
 }

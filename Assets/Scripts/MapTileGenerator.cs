@@ -79,12 +79,12 @@ public class MapTileGenerator : MonoBehaviour
                 {
                     case TileType.Floor:
                         Instantiate(floor, new Vector3(i, 0, j), Quaternion.identity);
-                        Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
+                        //Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
                     case TileType.Start:
                         Instantiate(start, new Vector3(i, 0, j), Quaternion.identity);
-                        Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
+                        //Instantiate(ceiling, new Vector3(i, 4, j), Quaternion.Euler(-180f, 0, 0));
                         break;
 
                     case TileType.Wall:
