@@ -1,11 +1,12 @@
-﻿extern alias mscorlib;
-using mscorlib::System.Threading.Tasks;
+﻿// extern alias mscorlib;
+// using mscorlib::System.Threading.Tasks;
 
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class RecordHighScore : MonoBehaviour
 {
