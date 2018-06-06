@@ -49,7 +49,7 @@ public class Movement : MonoBehaviour
 
         GetComponent<Animator>().SetBool("MakeWalk", Input.GetAxis("Vertical") != 0);
 
-        if (Input.GetKeyUp(KeyCode.C))
+        if (Input.GetButtonUp("Fire2"))
         {
             var camera = FindObjectOfType(typeof(CameraFollow)) as CameraFollow;
             camera.overview = !camera.overview;
